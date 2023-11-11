@@ -117,7 +117,7 @@ app/api/__init__.py                          0      0   100%
 app/api/api_v1/__init__.py                   0      0   100%
 app/api/api_v1/api.py                        9      0   100%
 app/api/api_v1/endpoints/__init__.py         0      0   100%
-app/api/api_v1/endpoints/biosignals.py      76      9    88%   27, 63, 84, 87, 89, 117, 122, 150, 155
+app/api/api_v1/endpoints/biosignals.py      62      9    85%   26, 52, 73, 76, 78, 96, 101, 119, 124
 app/api/api_v1/endpoints/items.py           42     20    52%   22-28, 56-62, 77, 79, 93-99
 app/api/api_v1/endpoints/login.py           47     21    55%   33, 35, 58-69, 81-96
 app/api/api_v1/endpoints/roles.py           39      2    95%   59, 93
@@ -131,7 +131,7 @@ app/core/config.py                          72      6    92%   33, 36, 46, 58, 6
 app/core/security.py                        21      1    95%   24
 app/crud/__init__.py                         6      0   100%
 app/crud/base.py                            39      6    85%   35-40
-app/crud/crud_biosignal.py                  33      2    94%   31, 36
+app/crud/crud_biosignal.py                  32      2    94%   31, 36
 app/crud/crud_insight.py                    33      4    88%   37-40
 app/crud/crud_item.py                       17      1    94%   25
 app/crud/crud_lead.py                       30      4    87%   33-36
@@ -155,9 +155,9 @@ app/models/role.py                          13      1    92%   10
 app/models/user.py                          21      3    86%   10-12
 app/schemas/__init__.py                      8      0   100%
 app/schemas/biosignal.py                    21      0   100%
-app/schemas/insight.py                      40      0   100%
+app/schemas/insight.py                      35      0   100%
 app/schemas/item.py                         18      0   100%
-app/schemas/lead.py                         26      0   100%
+app/schemas/lead.py                         22      0   100%
 app/schemas/msg.py                           3      0   100%
 app/schemas/role.py                         16      0   100%
 app/schemas/token.py                         7      0   100%
@@ -165,7 +165,7 @@ app/schemas/user.py                         22      0   100%
 app/tests/__init__.py                        0      0   100%
 app/tests/api/__init__.py                    0      0   100%
 app/tests/api/api_v1/__init__.py             0      0   100%
-app/tests/api/api_v1/test_biosignal.py     123      1    99%   177
+app/tests/api/api_v1/test_biosignal.py     122      1    99%   175
 app/tests/api/api_v1/test_celery.py          0      0   100%
 app/tests/api/api_v1/test_items.py          22      0   100%
 app/tests/api/api_v1/test_login.py          15      0   100%
@@ -189,7 +189,7 @@ app/tests/utils/user.py                     43      6    86%   48-52, 71-75
 app/tests/utils/utils.py                    18      0   100%
 app/utils.py                                54     40    26%   19-33, 37-41, 50-56, 71-76, 91-100, 104-108
 ----------------------------------------------------------------------
-TOTAL                                     1960    243    88%
+TOTAL                                     1935    243    87%
 ```
 
 There's a small issue with the tests and the DB at the moment, the tests will sometimes populate the DB and erase the data in it, after running the tests you could find test data in the SWAGGER responses due to this. I decided to not fix this issue for the sake of time and since the tests usually will not run in any client facing infra.
