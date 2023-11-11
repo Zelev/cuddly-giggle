@@ -1,4 +1,3 @@
-import json
 from typing import Any, List
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -11,7 +10,7 @@ from app.insights import get_total_zero_crossing, get_zero_crossing
 router = APIRouter()
 
 
-@router.post("/", response_model=Any)
+@router.post("/", response_model=schemas.Biosignal)
 def create_biosignal(
     *,
     db: Session = Depends(deps.get_db),
@@ -34,17 +33,7 @@ def create_biosignal(
             # calculate the insights for the biosignal by each lead
             get_zero_crossing(db=db, lead=lead_obj)
         get_total_zero_crossing(db=db, biosignal=biosignal_obj)
-    # Assemble the response since the serializer is mocking me
-    insights = assemble_insights(biosignal_obj.insights)
-    leads = assemble_leads(biosignal_obj.leads)
-    response = {
-        "id": biosignal_obj.id,
-        "name": biosignal_obj.name,
-        "user_id": biosignal_obj.user_id,
-        "leads": leads,
-        "insights": insights,
-    }
-    return json.dumps(response)
+    return biosignal_obj
 
 
 @router.get("/", response_model=List[schemas.Biosignal])
@@ -68,7 +57,7 @@ def read_biosignals(
     return biosignals
 
 
-@router.get("/{id}", response_model=Any)
+@router.get("/{id}", response_model=schemas.Biosignal)
 def read_biosignal(
     *,
     db: Session = Depends(deps.get_db),
@@ -87,20 +76,10 @@ def read_biosignal(
         raise HTTPException(status_code=404, detail="Biosignal not found")
     if not biosignal:
         raise HTTPException(status_code=404, detail="Biosignal not found")
-    # Assemble the response since the serializer is mocking me
-    insights = assemble_insights(biosignal.insights)
-    leads = assemble_leads(biosignal.leads)
-    response = {
-        "id": biosignal.id,
-        "name": biosignal.name,
-        "user_id": biosignal.user_id,
-        "leads": leads,
-        "insights": insights,
-    }
-    return response
+    return biosignal
 
 
-@router.put("/{id}", response_model=Any)
+@router.put("/{id}", response_model=schemas.Biosignal)
 def update_biosignal(
     *,
     db: Session = Depends(deps.get_db),
@@ -121,17 +100,7 @@ def update_biosignal(
     if not biosignal:
         raise HTTPException(status_code=404, detail="Biosignal not found")
     biosignal = crud.biosignal.update(db=db, db_obj=biosignal, obj_in=biosignal_in)
-    # Assemble the response since the serializer is mocking me
-    insights = assemble_insights(biosignal.insights)
-    leads = assemble_leads(biosignal.leads)
-    response = {
-        "id": biosignal.id,
-        "name": biosignal.name,
-        "user_id": biosignal.user_id,
-        "leads": leads,
-        "insights": insights,
-    }
-    return json.dumps(response)
+    return biosignal
 
 
 @router.delete("/{id}", response_model=schemas.Biosignal)
@@ -155,29 +124,3 @@ def delete_biosignal(
         raise HTTPException(status_code=404, detail="Biosignal not found")
     biosignal = crud.biosignal.remove(db=db, id=id)
     return biosignal
-
-
-def assemble_leads(leads: List[models.Lead]) -> List[dict]:
-    return [
-        {
-            "id": lead_obj.id,
-            "name": lead_obj.name,
-            "signal": lead_obj.signal,
-            "insights": assemble_insights(lead_obj.insights),
-        }
-        for lead_obj in leads
-    ]
-
-
-def assemble_insights(insights: List[models.Insight]) -> List[dict]:
-    return [
-        {
-            "id": insight_obj.id,
-            "name": insight_obj.name,
-            "description": insight_obj.description,
-            "value_1": insight_obj.value_1,
-            "value_2": insight_obj.value_2,
-            "value_3": insight_obj.value_3,
-        }
-        for insight_obj in insights
-    ]

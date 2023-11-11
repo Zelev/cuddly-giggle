@@ -1,5 +1,3 @@
-import json
-
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
@@ -27,7 +25,7 @@ def test_create_biosignal(
         json=data,
     )
     assert response.status_code == 200
-    content = json.loads(response.json())
+    content = response.json()
     assert content["name"] == data["name"]
     assert "id" in content
     assert "user_id" in content
@@ -53,7 +51,7 @@ def test_create_biosignal_with_lead(
         json=data,
     )
     assert response.status_code == 200
-    content = json.loads(response.json())
+    content = response.json()
     assert content["name"] == data["name"]
     assert "id" in content
     assert "user_id" in content
@@ -139,7 +137,7 @@ def test_update_biosignal(
         json=data,
     )
     assert response.status_code == 200
-    content = json.loads(response.json())
+    content = response.json()
     assert content["name"] == data["name"]
     assert content["id"] == biosignal.id
     assert content["user_id"] == biosignal.user_id

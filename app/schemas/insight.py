@@ -37,15 +37,10 @@ class InsightInDBBase(InsightBase):
     value_1: Optional[float] = None
     value_2: Optional[bool] = None
     value_3: Optional[str] = None
-    biosignal_id: int
-    lead_id: int
+    biosignal_id: Optional[int] = None
+    lead_id: Optional[int] = None
     model_config = ConfigDict(from_attributes=True)
 
 
 class Insight(InsightInDBBase):
-    id: int
-    name: str
-    description: Optional[str] = None
-    value_1: Optional[float] = None
-    value_2: Optional[bool] = None
-    value_3: Optional[str] = None
+    pass

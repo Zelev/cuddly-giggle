@@ -35,7 +35,6 @@ class CRUDBiosignal(CRUDBase[Biosignal, BiosignalCreate, BiosignalUpdate]):
         if "leads" in update_data and not update_data.get("leads"):
             del update_data["leads"]
         db_obj = super().update(db, db_obj=db_obj, obj_in=update_data)
-        print(db_obj.name)
         return db_obj
 
     def delete(self, db: Session, *, id: int) -> Biosignal:

@@ -31,8 +31,4 @@ class LeadInDBBase(LeadBase):
 
 
 class Lead(LeadInDBBase):
-    id: int
-    name: str
-    samples_number: Optional[int] = None
-    signal: list[int] = []
-    insights: Optional[list[Insight]] = None
+    pass
