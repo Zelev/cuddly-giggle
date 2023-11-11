@@ -63,11 +63,12 @@ erDiagram
     USER ||--o{ SIGNAL : uploads
     SIGNAL ||--o| LEAD : contains
     SIGNAL ||--o{ INSIGHT : contains
+    LEAD ||--o{ INSIGHT : contains
 ```
 
 _created using [mermaid](https://mermaid.js.org/)_
 
-Note: The Insights in this ER could be associated with the specific lead for more specificity.
+Note: The Insights may belong to a full biosignal (ECG) or to a single lead
 
 ## How to setup
 
@@ -116,7 +117,7 @@ app/api/__init__.py                          0      0   100%
 app/api/api_v1/__init__.py                   0      0   100%
 app/api/api_v1/api.py                        9      0   100%
 app/api/api_v1/endpoints/__init__.py         0      0   100%
-app/api/api_v1/endpoints/biosignals.py      61      9    85%   26, 51, 72, 75, 77, 95, 100, 118, 123
+app/api/api_v1/endpoints/biosignals.py      76      9    88%   27, 63, 84, 87, 89, 117, 122, 150, 155
 app/api/api_v1/endpoints/items.py           42     20    52%   22-28, 56-62, 77, 79, 93-99
 app/api/api_v1/endpoints/login.py           47     21    55%   33, 35, 58-69, 81-96
 app/api/api_v1/endpoints/roles.py           39      2    95%   59, 93
@@ -130,10 +131,10 @@ app/core/config.py                          72      6    92%   33, 36, 46, 58, 6
 app/core/security.py                        21      1    95%   24
 app/crud/__init__.py                         6      0   100%
 app/crud/base.py                            39      6    85%   35-40
-app/crud/crud_biosignal.py                  29      1    97%   31
-app/crud/crud_insight.py                    31      4    87%   44-47
+app/crud/crud_biosignal.py                  33      2    94%   31, 36
+app/crud/crud_insight.py                    33      4    88%   37-40
 app/crud/crud_item.py                       17      1    94%   25
-app/crud/crud_lead.py                       32      4    88%   30-33
+app/crud/crud_lead.py                       30      4    87%   33-36
 app/crud/crud_role.py                       22      1    95%   30
 app/crud/crud_user.py                       38      2    95%   36, 51
 app/db/__init__.py                           0      0   100%
@@ -143,20 +144,20 @@ app/db/init_db.py                           15     15     0%   1-37
 app/db/session.py                            5      0   100%
 app/initial_data.py                         14     14     0%   1-23
 app/insights/__init__.py                     1      0   100%
-app/insights/zero_crossing.py               11      0   100%
+app/insights/zero_crossing.py               18      0   100%
 app/main.py                                  8      0   100%
 app/models/__init__.py                       6      0   100%
 app/models/biosignal.py                     18      3    83%   10-12
-app/models/insight.py                       18      1    94%   10
+app/models/insight.py                       20      1    95%   10
 app/models/item.py                          12      1    92%   9
-app/models/lead.py                          15      1    93%   10
+app/models/lead.py                          16      1    94%   10
 app/models/role.py                          13      1    92%   10
 app/models/user.py                          21      3    86%   10-12
 app/schemas/__init__.py                      8      0   100%
 app/schemas/biosignal.py                    21      0   100%
-app/schemas/insight.py                      33      0   100%
+app/schemas/insight.py                      40      0   100%
 app/schemas/item.py                         18      0   100%
-app/schemas/lead.py                         19      0   100%
+app/schemas/lead.py                         26      0   100%
 app/schemas/msg.py                           3      0   100%
 app/schemas/role.py                         16      0   100%
 app/schemas/token.py                         7      0   100%
@@ -164,30 +165,31 @@ app/schemas/user.py                         22      0   100%
 app/tests/__init__.py                        0      0   100%
 app/tests/api/__init__.py                    0      0   100%
 app/tests/api/api_v1/__init__.py             0      0   100%
-app/tests/api/api_v1/test_biosignal.py     123      1    99%   169
+app/tests/api/api_v1/test_biosignal.py     123      1    99%   177
 app/tests/api/api_v1/test_celery.py          0      0   100%
 app/tests/api/api_v1/test_items.py          22      0   100%
 app/tests/api/api_v1/test_login.py          15      0   100%
-app/tests/api/api_v1/test_roles.py          82      0   100%
+app/tests/api/api_v1/test_roles.py          80      0   100%
 app/tests/api/api_v1/test_users.py          78      0   100%
 app/tests/conftest.py                       25      0   100%
 app/tests/crud/__init__.py                   0      0   100%
 app/tests/crud/test_biosignal.py            43      0   100%
-app/tests/crud/test_insight.py              54      0   100%
+app/tests/crud/test_insight.py              76      0   100%
 app/tests/crud/test_item.py                 52      0   100%
-app/tests/crud/test_lead.py                 55      0   100%
+app/tests/crud/test_lead.py                 68      0   100%
 app/tests/crud/test_role.py                 58      0   100%
 app/tests/crud/test_user.py                 84      0   100%
 app/tests/settings/test_settings.py         35      0   100%
 app/tests/utils/__init__.py                  0      0   100%
-app/tests/utils/biosignal.py                30      4    87%   34-37
+app/tests/utils/biosignal.py                29      4    86%   32-35
 app/tests/utils/item.py                     14      0   100%
-app/tests/utils/roles.py                    19      5    74%   20-24
+app/tests/utils/lead.py                     16      3    81%   21-25
+app/tests/utils/roles.py                    17      5    71%   18-22
 app/tests/utils/user.py                     43      6    86%   48-52, 71-75
 app/tests/utils/utils.py                    18      0   100%
 app/utils.py                                54     40    26%   19-33, 37-41, 50-56, 71-76, 91-100, 104-108
 ----------------------------------------------------------------------
-TOTAL                                     1871    239    87%
+TOTAL                                     1960    243    88%
 ```
 
 There's a small issue with the tests and the DB at the moment, the tests will sometimes populate the DB and erase the data in it, after running the tests you could find test data in the SWAGGER responses due to this. I decided to not fix this issue for the sake of time and since the tests usually will not run in any client facing infra.

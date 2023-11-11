@@ -1,11 +1,11 @@
+from datetime import datetime
 from typing import Any, Dict, Optional, Union
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app.crud.base import CRUDBase
 from app.models.biosignal import Biosignal
 from app.schemas.biosignal import BiosignalCreate, BiosignalUpdate
-from datetime import datetime
 
 
 class CRUDBiosignal(CRUDBase[Biosignal, BiosignalCreate, BiosignalUpdate]):
@@ -31,9 +31,12 @@ class CRUDBiosignal(CRUDBase[Biosignal, BiosignalCreate, BiosignalUpdate]):
             update_data = obj_in
         else:
             update_data = obj_in.model_dump(exclude_unset=True)
-        # update leads if provided
         update_data["updated_at"] = datetime.now()
-        return super().update(db, db_obj=db_obj, obj_in=update_data)
+        if "leads" in update_data and not update_data.get("leads"):
+            del update_data["leads"]
+        db_obj = super().update(db, db_obj=db_obj, obj_in=update_data)
+        print(db_obj.name)
+        return db_obj
 
     def delete(self, db: Session, *, id: int) -> Biosignal:
         db_obj = db.query(Biosignal).get(id)
@@ -41,11 +44,24 @@ class CRUDBiosignal(CRUDBase[Biosignal, BiosignalCreate, BiosignalUpdate]):
         db.commit()
         return db_obj
 
-    def get_by_user(self, db: Session, *, user_id: int, skip: int = 0, limit: int = 100) -> Optional[Biosignal]:
-        return db.query(Biosignal).filter(Biosignal.user_id == user_id).offset(skip).limit(limit).all()
+    def get_by_user(
+        self, db: Session, *, user_id: int, skip: int = 0, limit: int = 100
+    ) -> Optional[Biosignal]:
+        return (
+            db.query(Biosignal)
+            .filter(Biosignal.user_id == user_id)
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
 
-    def get_by_id(self, db: Session, *, id: int) -> Optional[Biosignal]:
-        return db.query(Biosignal).filter(Biosignal.id == id).first()
+    def get(self, db: Session, *, id: int) -> Optional[Biosignal]:
+        return (
+            db.query(Biosignal)
+            .options(joinedload(Biosignal.leads), joinedload(Biosignal.insights))
+            .filter(Biosignal.id == id)
+            .first()
+        )
 
 
 biosignal = CRUDBiosignal(Biosignal)

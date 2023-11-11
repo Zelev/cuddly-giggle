@@ -1,8 +1,9 @@
 from typing import Optional
 
-from pydantic import ConfigDict, BaseModel
-from app.schemas.lead import Lead, LeadCreate, LeadUpdate
+from pydantic import BaseModel, ConfigDict
+
 from app.schemas.insight import Insight
+from app.schemas.lead import Lead, LeadCreate
 
 
 # Shared properties
@@ -19,7 +20,7 @@ class BiosignalCreate(BiosignalBase):
 
 # Properties to receive via API on update
 class BiosignalUpdate(BiosignalBase):
-    leads: Optional[list[LeadUpdate]] = None
+    name: Optional[str] = None
 
 
 class BiosignalInDB(BiosignalBase):

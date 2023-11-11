@@ -1,13 +1,11 @@
-from typing import Dict
-
 from sqlalchemy.orm import Session
 
 from app import crud, models
-from app.tests.utils.utils import random_lower_string, random_email
-from app.schemas.user import UserCreate
-from app.schemas.biosignal import BiosignalCreate, Biosignal
-from app.schemas.lead import LeadCreate
+from app.schemas.biosignal import Biosignal, BiosignalCreate
 from app.schemas.insight import InsightCreate
+from app.schemas.lead import LeadCreate
+from app.schemas.user import UserCreate
+from app.tests.utils.utils import random_email, random_lower_string
 
 
 def create_random_biosignal(db: Session, *, user_id: int = None) -> models.Biosignal:

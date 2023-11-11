@@ -1,15 +1,15 @@
-from typing import TYPE_CHECKING
 from datetime import datetime
+from typing import TYPE_CHECKING
 
-from sqlalchemy import Boolean, Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
 
 if TYPE_CHECKING:
+    from .biosignal import Biosignal  # noqa: F401
     from .item import Item  # noqa: F401
     from .role import Role  # noqa: F401
-    from .biosignal import Biosignal  # noqa: F401
 
 
 class User(Base):

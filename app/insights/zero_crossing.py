@@ -1,9 +1,9 @@
+import numpy
+
 from app import crud
+from app.schemas.biosignal import Biosignal
 from app.schemas.insight import InsightCreate
 from app.schemas.lead import Lead
-
-
-import numpy
 
 
 def get_zero_crossing(db, lead: Lead) -> InsightCreate:
@@ -27,5 +27,25 @@ def get_zero_crossing(db, lead: Lead) -> InsightCreate:
     # this returns the list of indexes just before the zero crossing
     zero_crossings = numpy.where(numpy.diff(numpy.signbit(signal)))[0]
     zero_crossings_count = len(zero_crossings) or 0
-    insight_in = InsightCreate(name="Zero Crossing", value_1=zero_crossings_count, biosignal_id=lead.biosignal_id)
+    insight_in = InsightCreate(
+        name="Zero Crossing", value_1=zero_crossings_count, lead_id=lead.id
+    )
+    return crud.insight.create(db=db, obj_in=insight_in)
+
+
+def get_total_zero_crossing(db, biosignal: Biosignal) -> InsightCreate:
+    """
+    In case that the Biosignal has more than one lead, this function will return the total
+    number of zero crossings for all the leads in the Biosignal
+    """
+    crossings = []
+    for lead in biosignal.leads:
+        crossings = [
+            insight for insight in lead.insights if insight.name == "Zero Crossing"
+        ]
+    insight_in = InsightCreate(
+        name="Total Zero Crossing",
+        value_1=sum([insight.value_1 for insight in crossings]),
+        biosignal_id=biosignal.id,
+    )
     return crud.insight.create(db=db, obj_in=insight_in)

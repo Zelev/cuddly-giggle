@@ -3,10 +3,8 @@ from sqlalchemy.orm import Session
 
 from app import crud
 from app.core.config import settings
-from app.models.role import Role
-from app.schemas.role import RoleCreate, RoleUpdate
-from app.tests.utils.utils import random_lower_string
 from app.tests.utils.roles import create_random_role
+from app.tests.utils.utils import random_lower_string
 
 
 def test_create_role(

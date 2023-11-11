@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app import crud
 from app.schemas.insight import InsightCreate, InsightUpdate
 from app.tests.utils.biosignal import create_random_biosignal
+from app.tests.utils.lead import create_random_lead
 from app.tests.utils.utils import random_lower_string
 
 
@@ -64,3 +65,28 @@ def test_delete_insight(db: Session) -> None:
     assert insight3 is None
     assert insight2.id == insight.id
     assert insight2.name == name
+
+
+def test_get_insight_with_lead(db: Session) -> None:
+    name = random_lower_string()
+    lead = create_random_lead(db)
+    insight_in = InsightCreate(name=name, lead_id=lead.id)
+    insight = crud.insight.create(db=db, obj_in=insight_in)
+    stored_insight = crud.insight.get(db=db, id=insight.id)
+    assert stored_insight
+    assert insight.id == stored_insight.id
+    assert insight.name == stored_insight.name
+    assert insight.lead_id == stored_insight.lead_id
+
+
+def test_get_insight_by_lead(db: Session) -> None:
+    lead = create_random_lead(db)
+    insight_in = InsightCreate(name=random_lower_string(), lead_id=lead.id)
+    insight_1 = crud.insight.create(db=db, obj_in=insight_in)
+    insight_in = InsightCreate(name=random_lower_string(), lead_id=lead.id)
+    insight_2 = crud.insight.create(db=db, obj_in=insight_in)
+    insights = crud.insight.get_by_lead(db=db, lead_id=lead.id)
+    assert insights
+    assert len(insights) == 2
+    assert insight_1 in insights
+    assert insight_2 in insights

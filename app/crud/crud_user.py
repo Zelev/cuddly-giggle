@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any, Dict, Optional, Union
 
 from sqlalchemy.orm import Session
@@ -8,7 +9,6 @@ from app.models.user import User
 
 # from app.models.role import Role
 from app.schemas.user import UserCreate, UserUpdate
-from datetime import datetime
 
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):

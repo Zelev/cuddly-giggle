@@ -1,9 +1,9 @@
-from .crud_item import item
-from .crud_user import user
-from .crud_role import role
 from .crud_biosignal import biosignal
-from .crud_lead import lead
 from .crud_insight import insight
+from .crud_item import item
+from .crud_lead import lead
+from .crud_role import role
+from .crud_user import user
 
 # For a new basic set of CRUD operations you could just do
 

@@ -1,6 +1,8 @@
 from typing import Optional
 
-from pydantic import ConfigDict, BaseModel
+from pydantic import BaseModel, ConfigDict
+
+from app.schemas.insight import Insight
 
 
 class LeadBase(BaseModel):
@@ -15,6 +17,7 @@ class LeadCreate(LeadBase):
 
 class LeadUpdate(LeadBase):
     signal: Optional[list[int]] = None
+    insights: Optional[list[Insight]] = None
 
 
 class LeadInDBBase(LeadBase):
@@ -23,8 +26,13 @@ class LeadInDBBase(LeadBase):
     biosignal_id: int
     samples_number: Optional[int] = None
     signal: list[int] = []
+    insights: Optional[list[Insight]]
     model_config = ConfigDict(from_attributes=True)
 
 
 class Lead(LeadInDBBase):
-    pass
+    id: int
+    name: str
+    samples_number: Optional[int] = None
+    signal: list[int] = []
+    insights: Optional[list[Insight]] = None

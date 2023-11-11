@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import ConfigDict, BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class InsightBase(BaseModel):
@@ -12,7 +12,8 @@ class InsightBase(BaseModel):
 
 
 class InsightCreate(InsightBase):
-    biosignal_id: int
+    biosignal_id: Optional[int] = None
+    lead_id: Optional[int] = None
     name: str
     description: Optional[str] = None
     value_1: Optional[float] = None
@@ -37,8 +38,14 @@ class InsightInDBBase(InsightBase):
     value_2: Optional[bool] = None
     value_3: Optional[str] = None
     biosignal_id: int
+    lead_id: int
     model_config = ConfigDict(from_attributes=True)
 
 
 class Insight(InsightInDBBase):
-    pass
+    id: int
+    name: str
+    description: Optional[str] = None
+    value_1: Optional[float] = None
+    value_2: Optional[bool] = None
+    value_3: Optional[str] = None

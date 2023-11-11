@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any, Dict, Optional, Union
 
 from sqlalchemy.orm import Session
@@ -5,7 +6,6 @@ from sqlalchemy.orm import Session
 from app.crud.base import CRUDBase
 from app.models.role import Role
 from app.schemas.role import RoleCreate, RoleUpdate
-from datetime import datetime
 
 
 class CRUDRole(CRUDBase[Role, RoleCreate, RoleUpdate]):

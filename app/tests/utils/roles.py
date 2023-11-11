@@ -1,10 +1,8 @@
-from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 from app import crud
-from app.core.config import settings
 from app.models.role import Role
-from app.schemas.role import RoleCreate, RoleUpdate
+from app.schemas.role import RoleCreate
 from app.tests.utils.utils import random_lower_string
 
 

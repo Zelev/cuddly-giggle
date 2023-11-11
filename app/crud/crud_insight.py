@@ -1,14 +1,12 @@
-from app.crud.base import CRUDBase
+from datetime import datetime
 
+from app.crud.base import CRUDBase
 from app.models.insight import Insight
 from app.schemas.insight import InsightCreate, InsightUpdate
 
-from datetime import datetime
 
 class CRUDInsight(CRUDBase[Insight, InsightCreate, InsightUpdate]):
-    def create(
-        self, db, *, obj_in: InsightCreate
-    ) -> Insight:
+    def create(self, db, *, obj_in: InsightCreate) -> Insight:
         db_obj = Insight(
             name=obj_in.name,
             description=obj_in.description,
@@ -16,6 +14,7 @@ class CRUDInsight(CRUDBase[Insight, InsightCreate, InsightUpdate]):
             value_2=obj_in.value_2,
             value_3=obj_in.value_3,
             biosignal_id=obj_in.biosignal_id,
+            lead_id=obj_in.lead_id,
             created_at=datetime.now(),
         )
         db.add(db_obj)
@@ -23,13 +22,7 @@ class CRUDInsight(CRUDBase[Insight, InsightCreate, InsightUpdate]):
         db.refresh(db_obj)
         return db_obj
 
-    def update(
-        self,
-        db,
-        *,
-        db_obj: Insight,
-        obj_in: InsightUpdate
-    ) -> Insight:
+    def update(self, db, *, db_obj: Insight, obj_in: InsightUpdate) -> Insight:
         db_obj.name = obj_in.name or db_obj.name
         db_obj.description = obj_in.description or db_obj.description
         db_obj.value_1 = obj_in.value_1 or db_obj.value_1
@@ -39,18 +32,23 @@ class CRUDInsight(CRUDBase[Insight, InsightCreate, InsightUpdate]):
         db.commit()
         db.refresh(db_obj)
         return db_obj
-    
+
     def delete(self, db, *, id: int) -> Insight:
         db_obj = db.query(self.model).get(id)
         db.delete(db_obj)
         db.commit()
         return db_obj
-    
+
     def get(self, db, *, id: int) -> Insight:
         return db.query(self.model).filter(self.model.id == id).first()
-    
+
     def get_by_biosignal(self, db, *, biosignal_id: int) -> Insight:
-        return db.query(self.model).filter(self.model.biosignal_id == biosignal_id).all()
-    
+        return (
+            db.query(self.model).filter(self.model.biosignal_id == biosignal_id).all()
+        )
+
+    def get_by_lead(self, db, *, lead_id: int) -> Insight:
+        return db.query(self.model).filter(self.model.lead_id == lead_id).all()
+
 
 insight = CRUDInsight(Insight)

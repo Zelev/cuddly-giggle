@@ -4,8 +4,8 @@ from sqlalchemy.orm import Session
 from app import crud
 from app.core.security import verify_password
 from app.schemas.user import UserCreate, UserUpdate
-from app.tests.utils.utils import random_email, random_lower_string
 from app.tests.utils.roles import create_random_role
+from app.tests.utils.utils import random_email, random_lower_string
 
 
 def test_create_user(db: Session) -> None:

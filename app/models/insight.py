@@ -1,7 +1,7 @@
-from typing import TYPE_CHECKING
 from datetime import datetime
+from typing import TYPE_CHECKING
 
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Float, Boolean
+from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
@@ -21,3 +21,5 @@ class Insight(Base):
     value_1 = Column(Float, index=True)
     value_2 = Column(Boolean, index=True)
     value_3 = Column(String, index=True)
+    lead_id = Column(Integer, ForeignKey("lead.id"))
+    lead = relationship("Lead", back_populates="insights")

@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app import crud
+from app.insights import get_zero_crossing
 from app.schemas.lead import LeadCreate, LeadUpdate
 from app.tests.utils.biosignal import create_random_biosignal
 from app.tests.utils.utils import random_lower_string
@@ -21,7 +22,7 @@ def test_get_lead(db: Session) -> None:
     biosignal = create_random_biosignal(db)
     lead_in = LeadCreate(name=name, biosignal_id=biosignal.id)
     lead = crud.lead.create(db=db, obj_in=lead_in)
-    stored_lead = crud.lead.get_by_id(db=db, id=lead.id)
+    stored_lead = crud.lead.get(db=db, id=lead.id)
     assert stored_lead
     assert lead.id == stored_lead.id
     assert lead.name == stored_lead.name
@@ -39,7 +40,6 @@ def test_get_lead_by_biosignal_id(db: Session) -> None:
     assert len(leads) == 2
     assert lead_1 in leads
     assert lead_2 in leads
-
 
 
 def test_update_lead(db: Session) -> None:
@@ -66,3 +66,19 @@ def test_delete_lead(db: Session) -> None:
     assert lead2.id == lead.id
     assert lead2.name == name
     assert lead2.biosignal_id == biosignal.id
+
+
+def test_get_lead_with_insight(db: Session) -> None:
+    name = random_lower_string()
+    biosignal = create_random_biosignal(db)
+    lead_in = LeadCreate(
+        name=name, biosignal_id=biosignal.id, signal=[-1, 2, 3, 4, 5, 6, 7, 8, 9]
+    )
+    lead_obj = crud.lead.create(db=db, obj_in=lead_in)
+    get_zero_crossing(db, lead_obj)
+    lead = crud.lead.get(db=db, id=lead_obj.id)
+    assert lead
+    assert lead.insights
+    assert len(lead.insights) == 1
+    assert lead.insights[0].name == "Zero Crossing"
+    assert lead.insights[0].value_1 == 1.0

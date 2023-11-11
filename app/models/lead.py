@@ -1,7 +1,7 @@
-from typing import TYPE_CHECKING
 from datetime import datetime
+from typing import TYPE_CHECKING
 
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, ARRAY
+from sqlalchemy import ARRAY, Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
@@ -18,3 +18,4 @@ class Lead(Base):
     created_at = Column(DateTime, index=True, default=datetime.now(), nullable=False)
     biosignal = relationship("Biosignal", back_populates="leads")
     biosignal_id = Column(Integer, ForeignKey("biosignal.id"))
+    insights = relationship("Insight", back_populates="lead")
